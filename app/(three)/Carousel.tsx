@@ -20,60 +20,52 @@ gsap.defaults({
 export default function Carousel() {
 	const rootRef = useRef<Group>(null!);
 	const [activePlane, setActivePlane] = useState<number | null>(null);
-	const prevActivePlane = usePrevious(activePlane);
+	const prevActivePlane = usePrevious<number | null>(activePlane);
 	const { viewport } = useThree();
 
-	/*--------------------
-  Vars
-  --------------------*/
-	const progress = useRef(0);
-	const startX = useRef(0);
-	const isDown = useRef(false);
+	const progress = useRef<number>(0);
+	const startX = useRef<number>(0);
+	const isDown = useRef<boolean>(false);
 	const speedWheel = 0.02;
 	const speedDrag = -0.3;
-	// const $items: Object3D<Event>[] | undefined = useMemo(() => {
-	// 	if (rootRef.current.children) return rootRef.current.children;
-	// }, [rootRef]);
-	const [$items, set$items] = useState<THREE.Object3D<Event>[]|undefined>(undefined);
+
+	const [$items, set$items] = useState<
+		THREE.Object3D<THREE.Event>[] | undefined
+	>(undefined);
 
 	useEffect(() => {
-		if (rootRef.current && rootRef.current.children) {
+		if (rootRef.current) {
 			set$items(rootRef.current.children);
 		}
-	}, []);
-	/*--------------------
-  Diaplay Items
-  --------------------*/
-	const displayItems = (item: any, index: number, active: number) => {
-		gsap.to(item.position, {
-			x: (index - active) * (planeSettings.width + planeSettings.gap),
-			y: 0,
-		});
-	};
+	}, [rootRef]);
 
-	/*--------------------
-	RAF
-  --------------------*/
 	useFrame(() => {
 		progress.current = Math.max(0, Math.min(progress.current, 100));
-		if (!$items) return;
-		const active = Math.floor((progress.current / 100) * ($items.length - 1));
-		$items.forEach((item, index) => displayItems(item, index, active));
-	});
 
-	/*--------------------
-  Handle Wheel
-  --------------------*/
-	const handleWheel = (e: { deltaY: number; deltaX: number }) => {
+		if (!$items) return;
+
+		const activeNro = Math.floor((progress.current / 100) * ($items.length - 1));
+		$items.forEach((item, index) => gsapDisplayItems(item, index, activeNro));
+	});
+	function gsapDisplayItems(
+		item: Object3D<THREE.Event>,
+		index: number,
+		activeNro: number
+	) {
+		gsap.to(item.position, {
+			x: (index - activeNro) * (planeSettings.width + planeSettings.gap),
+			y: 0,
+		});
+	}
+
+	const handleWheel = (e: ThreeEvent<WheelEvent>) => {
 		if (activePlane !== null) return;
+
 		const isVerticalScroll = Math.abs(e.deltaY) > Math.abs(e.deltaX);
 		const wheelProgress = isVerticalScroll ? e.deltaY : e.deltaX;
 		progress.current = progress.current + wheelProgress * speedWheel;
 	};
 
-	/*--------------------
-  Handle Down
-  --------------------*/
 	const handleDown = (e: ThreeEvent<PointerEvent>) => {
 		if (activePlane !== null) return;
 
@@ -82,28 +74,18 @@ export default function Carousel() {
 		// startX.current = e.clientX || (e.touches && e.touches[0].clientX) || 0;
 	};
 
-	/*--------------------
-  Handle Up
-  --------------------*/
 	const handleUp = () => {
 		isDown.current = false;
 	};
 
-	/*--------------------
-  Handle Move
-  --------------------*/
 	const handleMove = (e: ThreeEvent<PointerEvent>) => {
 		if (activePlane !== null || !isDown.current) return;
 		const x = e.clientX || 0;
-		// const x = e.clientX || (e.touches && e.touches[0].clientX) || 0;
 		const mouseProgress = (x - startX.current) * speedDrag;
 		progress.current = progress.current + mouseProgress;
 		startX.current = x;
 	};
 
-	/*--------------------
-  Click
-  --------------------*/
 	useEffect(() => {
 		if (!$items) return;
 		if (activePlane !== null && prevActivePlane === null) {
@@ -111,11 +93,8 @@ export default function Carousel() {
 		}
 	}, [activePlane, $items]);
 
-	/*--------------------
-  Render Plane Events
-  --------------------*/
-	const renderPlaneEvents = () => {
-		return (
+	return (
+		<group>
 			<mesh
 				position={[0, 0, -0.01]}
 				onWheel={handleWheel}
@@ -128,15 +107,6 @@ export default function Carousel() {
 				<planeGeometry args={[viewport.width, viewport.height]} />
 				<meshBasicMaterial transparent={true} opacity={0} />
 			</mesh>
-		);
-	};
-
-	/*--------------------
-  Render Slider
-  --------------------*/
-	const renderSlider = () => {
-		return (
-			// <group ref={setRoot}>
 			<group ref={rootRef}>
 				{collection_images.map((item, i) => (
 					<CarouselItem
@@ -150,13 +120,6 @@ export default function Carousel() {
 					/>
 				))}
 			</group>
-		);
-	};
-
-	return (
-		<group>
-			{renderPlaneEvents()}
-			{renderSlider()}
 		</group>
 	);
 }

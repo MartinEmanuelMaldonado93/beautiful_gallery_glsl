@@ -2,11 +2,10 @@
 import { useTexture } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
-import { MathUtils, Mesh, Vector2 } from "three";
+import { Mesh } from "three";
 import { useAnimation } from "framer-motion";
 import VS from "../(shaders)/photo.vertex.glsl";
 import FS from "../(shaders)/photo.fragment.glsl";
-import { useSpring } from "framer-motion";
 import { animate } from "framer-motion";
 import { useControls } from "leva";
 import gsap from "gsap";
@@ -44,25 +43,15 @@ export default function PlanePhoto({
 			onUpdate(latest) {
 				material.uniforms.uProgress.value = latest;
 			},
+			stiffness: 60,
+			mass: 1.7,
+			
 		});
-		animate(
-			material.uniforms.uImageRes.value.x,
-			active ? viewport.width : width,
-			{
-				onUpdate(latest) {
-					material.uniforms.uImageRes.value.x = latest;
-				},
-			}
-		);
-		animate(
-			material.uniforms.uImageRes.value.y,
-			active ? viewport.height : height,
-			{
-				onUpdate(latest) {
-					material.uniforms.uImageRes.value.y = latest;
-				},
-			}
-		);
+
+		gsap.to(material.uniforms.uRes.value, {
+			x: active ? viewport.width : width,
+			y: active ? viewport.height : height,
+		});
 	}, [active, viewport]);
 
 	const shaderArgs = useMemo(

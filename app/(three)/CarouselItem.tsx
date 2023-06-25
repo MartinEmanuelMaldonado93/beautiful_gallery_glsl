@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import PlanePhoto from "./PlanePhoto";
 import { Group, Vector3 } from "three";
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
@@ -11,7 +11,7 @@ type props = {
 	width?: number;
 	height?: number;
 	activePlane: number | null;
-	setActivePlane: any;
+	setActivePlane: Dispatch<SetStateAction<number | null>>;
 	item: image_data;
 };
 export default function CarouselItem({
@@ -29,7 +29,6 @@ export default function CarouselItem({
 	const { viewport } = useThree();
 	const timeoutID = useRef<NodeJS.Timeout>();
 
-	// z: isActive ? 0 : -0.01,  delay: isActive ? 0 : 2
 	const newZposition = isActive ? 0 : -0.01;
 	const targetPos = new Vector3(0, 0, newZposition);
 
@@ -37,9 +36,10 @@ export default function CarouselItem({
 		if (activePlane === index) {
 			setIsActive(true);
 			setCloseActive(true);
-		} else {
-			setIsActive(null);
+			return;
 		}
+
+		setIsActive(null);
 	}, [activePlane]);
 
 	useEffect(() => {
@@ -48,7 +48,7 @@ export default function CarouselItem({
 			z: isActive ? 0 : -0.01,
 			duration: 0.2,
 			ease: "power3.out",
-			delay: isActive ? 0 : 2,
+			delay: isActive ? 0 : 1,
 		});
 	}, [isActive]);
 
@@ -64,7 +64,6 @@ export default function CarouselItem({
 	const hoverScale = hover && !isActive ? 1.1 : 1;
 	const targetScale = new Vector3(hoverScale, hoverScale, 1);
 	const scaleSpeed = 0.1;
-
 	useFrame(() => {
 		if (!rootRef.current) return;
 
@@ -76,25 +75,23 @@ export default function CarouselItem({
 	function handleClose(e: ThreeEvent<MouseEvent>) {
 		e.stopPropagation();
 		if (!isActive) return;
-		setIsActive(false);
+
+		setActivePlane(null);
+		setHover(false);
 		clearTimeout(timeoutID.current);
 		timeoutID.current = setTimeout(() => {
 			setCloseActive(false);
-		}, 1500); // The duration of this timer depends on the duration of the plane's closing animation.
+		}, 1000); // The duration of this timer depends on the duration of the plane's closing animation.
 	}
 
 	return (
 		<group
 			ref={rootRef}
-			onClick={() => {
-				setIsActive(true);
-				console.log("click");
-			}}
+			onClick={() => setActivePlane(index)}
 			onPointerEnter={() => setHover(true)}
 			onPointerLeave={() => setHover(false)}
 		>
 			<PlanePhoto
-				// texture="./raudha_athif.jpg"
 				texture={item.image}
 				width={width}
 				height={height}

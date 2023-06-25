@@ -3,9 +3,11 @@ import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
 import { usePrevious } from "react-use";
 import gsap from "gsap";
 import CarouselItem from "./CarouselItem";
-import { Group, Object3D } from "three";
+import { Group, MathUtils, Object3D } from "three";
 import collection_images from "../(data)";
+import { EffectsWithRef } from "./Effects";
 
+const { lerp } = MathUtils;
 const planeSettings = {
 	width: 1,
 	height: 2.5,
@@ -19,6 +21,7 @@ gsap.defaults({
 
 export default function Carousel() {
 	const rootRef = useRef<Group>(null!);
+	const postRef = useRef<unknown>();
 	const [activePlane, setActivePlane] = useState<number | null>(null);
 	const prevActivePlane = usePrevious<number | null>(activePlane);
 	const { viewport } = useThree();
@@ -26,6 +29,8 @@ export default function Carousel() {
 	const progress = useRef<number>(0);
 	const startX = useRef<number>(0);
 	const isDown = useRef<boolean>(false);
+	const speed = useRef<number>(0);
+	const oldProgress = useRef<number>(0);
 	const speedWheel = 0.02;
 	const speedDrag = -0.3;
 
@@ -44,8 +49,20 @@ export default function Carousel() {
 
 		if (!$items) return;
 
-		const activeNro = Math.floor((progress.current / 100) * ($items.length - 1));
+		const activeNro = Math.floor(
+			(progress.current / 100) * ($items.length - 1)
+		);
 		$items.forEach((item, index) => gsapDisplayItems(item, index, activeNro));
+
+		speed.current = lerp(
+			speed.current,
+			Math.abs(oldProgress.current - progress.current),
+			0.1
+		);
+
+		oldProgress.current = lerp(oldProgress.current, progress.current, 0.1);
+		//@ts-ignore
+		if(postRef.current) postRef.current.thickness = speed.current;
 	});
 	function gsapDisplayItems(
 		item: Object3D<THREE.Event>,
@@ -120,6 +137,7 @@ export default function Carousel() {
 					/>
 				))}
 			</group>
+			<EffectsWithRef ref={postRef} />
 		</group>
 	);
 }

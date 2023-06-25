@@ -2,15 +2,15 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { Suspense } from "react";
-import CarouselItem from "./CarouselItem";
+import Carousel from "./Carousel";
 
 export default function CanvasScene() {
 	return (
 		<Suspense fallback={null}>
 			<Canvas className="h-screen w-full">
 				<ambientLight intensity={0.001} />
-				<CarouselItem />
-				<OrbitControls />
+				<Carousel />
+				{/* <OrbitControls /> */}
 			</Canvas>
 		</Suspense>
 	);

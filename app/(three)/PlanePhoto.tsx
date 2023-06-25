@@ -6,11 +6,11 @@ import { MathUtils, Mesh, Vector2 } from "three";
 import { useAnimation } from "framer-motion";
 import VS from "../(shaders)/photo.vertex.glsl";
 import FS from "../(shaders)/photo.fragment.glsl";
-import { CustomUniforms } from "./models";
 import { useSpring } from "framer-motion";
 import { animate } from "framer-motion";
 import { useControls } from "leva";
 import gsap from "gsap";
+import { CustomUniforms } from "../(models)";
 
 type props = {
 	texture: string;

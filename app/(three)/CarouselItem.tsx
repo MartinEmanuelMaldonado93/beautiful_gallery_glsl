@@ -3,14 +3,16 @@ import PlanePhoto from "./PlanePhoto";
 import { Group, Vector3 } from "three";
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
 import { useAnimation } from "framer-motion";
+import { image_data } from "../(models)";
+import gsap from "gsap";
 
 type props = {
 	index: number;
 	width?: number;
 	height?: number;
-	activePlane: number;
+	activePlane: number | null;
 	setActivePlane: any;
-	item: any;
+	item: image_data;
 };
 export default function CarouselItem({
 	index,
@@ -92,8 +94,8 @@ export default function CarouselItem({
 			onPointerLeave={() => setHover(false)}
 		>
 			<PlanePhoto
-				texture="./raudha_athif.jpg"
-				// texture={item.image}
+				// texture="./raudha_athif.jpg"
+				texture={item.image}
 				width={width}
 				height={height}
 				active={!!isActive}

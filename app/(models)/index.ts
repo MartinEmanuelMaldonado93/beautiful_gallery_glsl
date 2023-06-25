@@ -1,3 +1,7 @@
+export type image_data = {
+	image: string;
+};
+
 type Coordinates = { x: number; y: number };
 export type CustomUniforms = THREE.Material & {
 	uniforms: {

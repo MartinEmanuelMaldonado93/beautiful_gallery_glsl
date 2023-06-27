@@ -6,8 +6,11 @@ import CarouselItem from "./CarouselItem";
 import { Group, MathUtils, Object3D } from "three";
 import collection_images from "../(data)";
 import { EffectsWithRef } from "./Effects";
+import { getPiramidalIndex } from "../(utils)";
 
+const { min, max, abs, floor } = Math;
 const { lerp } = MathUtils;
+
 const planeSettings = {
 	width: 1,
 	height: 2.5,
@@ -45,63 +48,69 @@ export default function Carousel() {
 	}, [rootRef]);
 
 	useFrame(() => {
-		progress.current = Math.max(0, Math.min(progress.current, 100));
+		progress.current = max(0, min(progress.current, 100));
 
 		if (!$items) return;
 
-		const activeNro = Math.floor(
+		const activeIndex = floor(
 			(progress.current / 100) * ($items.length - 1)
 		);
-		$items.forEach((item, index) => gsapDisplayItems(item, index, activeNro));
+
+		$items.forEach((item, index) => 
+		gsapDisplayItems(item, index, activeIndex));// 1..2..3...4..5
 
 		speed.current = lerp(
 			speed.current,
-			Math.abs(oldProgress.current - progress.current),
-			0.1
+			abs(oldProgress.current - progress.current),
+			0.5
 		);
 
 		oldProgress.current = lerp(oldProgress.current, progress.current, 0.1);
 		//@ts-ignore
 		if(postRef.current) postRef.current.thickness = speed.current;
 	});
+
 	function gsapDisplayItems(
 		item: Object3D<THREE.Event>,
 		index: number,
 		activeNro: number
 	) {
+		if(!$items) return;
+		const piramidalIndex = getPiramidalIndex($items, activeNro)[index];
+		// console.log("display animation...")
 		gsap.to(item.position, {
 			x: (index - activeNro) * (planeSettings.width + planeSettings.gap),
-			y: 0,
+			y: $items.length * -0.1 + piramidalIndex * 0.1,
 		});
 	}
 
-	const handleWheel = (e: ThreeEvent<WheelEvent>) => {
+	function handleWheel(e: ThreeEvent<WheelEvent>) {
 		if (activePlane !== null) return;
 
-		const isVerticalScroll = Math.abs(e.deltaY) > Math.abs(e.deltaX);
+		const isVerticalScroll = abs(e.deltaY) > abs(e.deltaX);
 		const wheelProgress = isVerticalScroll ? e.deltaY : e.deltaX;
 		progress.current = progress.current + wheelProgress * speedWheel;
-	};
+	}
 
-	const handleDown = (e: ThreeEvent<PointerEvent>) => {
+	function handleDown(e: ThreeEvent<PointerEvent>) {
 		if (activePlane !== null) return;
 
 		isDown.current = true;
 		startX.current = e.clientX || 0;
 		// startX.current = e.clientX || (e.touches && e.touches[0].clientX) || 0;
-	};
+	}
 
-	const handleUp = () => {
+	function handleUp() {
 		isDown.current = false;
-	};
+	}
 
-	const handleMove = (e: ThreeEvent<PointerEvent>) => {
+	function handleMove(e: ThreeEvent<PointerEvent>) {
 		if (activePlane !== null || !isDown.current) return;
 		const x = e.clientX || 0;
 		const mouseProgress = (x - startX.current) * speedDrag;
 		progress.current = progress.current + mouseProgress;
 		startX.current = x;
-	};
+	}
 
 	useEffect(() => {
 		if (!$items) return;

@@ -30,7 +30,7 @@ export default function PlanePhoto({
 
 	useEffect(() => {
 		if (!meshRef.current.material) return;
-
+		// meshRef.current.rotation.set = 3;
 		const material = meshRef.current.material as CustomUniforms;
 		material.uniforms.uRes.value.x = width;
 		material.uniforms.uRes.value.y = height;

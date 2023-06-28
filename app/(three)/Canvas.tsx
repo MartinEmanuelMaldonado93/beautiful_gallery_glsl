@@ -6,12 +6,12 @@ import Carousel from "./Carousel";
 
 export default function CanvasScene() {
 	return (
-		<Suspense fallback={null}>
-			<Canvas className="h-screen w-full">
-				<ambientLight intensity={0.001} />
-				<Carousel />
-				{/* <OrbitControls /> */}
-			</Canvas>
-		</Suspense>
-	);
+    <Suspense fallback={null}>
+      <Canvas className="h-screen w-full">
+        <ambientLight intensity={0.001} />
+        <Carousel />
+        {/* <OrbitControls /> */}
+      </Canvas>
+    </Suspense>
+  );
 }

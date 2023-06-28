@@ -3,25 +3,52 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+	--foreground-rgb: 0, 0, 0;
+	--background-start-rgb: 214, 219, 220;
+	--background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+	:root {
+		--foreground-rgb: 255, 255, 255;
+		--background-start-rgb: 0, 0, 0;
+		--background-end-rgb: 0, 0, 0;
+	}
+}
+
+@font-face {
+	font-family: "big-daily-italic";
+	src: url("/font/bigdailyshort-italic-TRIAL-BF63fec2415e4aa.otf")
+		format("opentype");
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "big-daily-italic-light";
+	src: url("/font/bigdailyshort-extralightitalic-TRIAL-BF63fec24134d0b.otf")
+		format("opentype");
+	font-weight: lighter;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "big-daily-regular";
+	src: url("/font/bigdailyshort-light-TRIAL-BF63fec241761fc.otf")
+		format("opentype");
+	font-weight: normal;
+	font-style: normal;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+	/* color: rgb(var(--foreground-rgb)); */
+	background: linear-gradient(
+			to top,
+			transparent,
+			rgb(var(--background-end-rgb))
+		)
+		rgb(var(--background-start-rgb));
+	/* background-image: linear-gradient(180deg, rgb(255, 255, 255),rgb(180, 178, 178)); */
+	background-size: cover;
+	background-repeat: repeat;
 }

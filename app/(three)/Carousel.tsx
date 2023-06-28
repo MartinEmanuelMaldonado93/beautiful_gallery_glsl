@@ -7,6 +7,8 @@ import { Group, MathUtils, Object3D } from "three";
 import collection_images from "../(data)";
 import { EffectsWithRef } from "./Effects";
 import { getPiramidalIndex } from "../(utils)";
+import { useStore } from "zustand";
+import { useNameStore } from "@/store";
 
 const { min, max, abs, floor } = Math;
 const { lerp } = MathUtils;

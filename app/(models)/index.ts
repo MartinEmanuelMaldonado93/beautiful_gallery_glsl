@@ -1,5 +1,7 @@
 export type image_data = {
 	image: string;
+	name: string;
+	profession: string;
 };
 
 type Coordinates = { x: number; y: number };

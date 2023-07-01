@@ -3,7 +3,7 @@ import { create } from "zustand";
 type props = {
   name_photo: string;
   index: number;
-  profession: string;
+  profession?: string;
   isClicked?: boolean;
 };
 type NameStore = props & {
@@ -12,7 +12,7 @@ type NameStore = props & {
 export const useNameStore = create<NameStore>()((set) => ({
   name_photo: "",
   index: 0,
-  profession: "",
+  profession: undefined,
   isClicked: false,
   setNamePhoto: ({ name_photo, index, profession, isClicked }: props) =>
     set(() => ({ name_photo, index, profession, isClicked })),

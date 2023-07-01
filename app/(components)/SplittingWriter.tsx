@@ -4,25 +4,25 @@ import "splitting/dist/splitting.css";
 import "splitting/dist/splitting-cells.css";
 import "./SplittingWriter.css";
 
-export default function SplittingWriter() {
+export function SplittingWriter() {
   const containerRef = useRef<HTMLDivElement>(null!);
 
   useEffect(() => {
     const container = containerRef.current;
     Splitting({ target: container });
 
-    const interval = setInterval(() => {
-      const chars = container.querySelectorAll(".char");
+    // const interval = setInterval(() => {
+    //   const chars = container.querySelectorAll(".char");
 
-      chars.forEach((char, index) => {
-        setTimeout(() => {
-          //@ts-ignore
-          char.style.visibility = "visible";
-        }, 100 * index);
-      });
-    }, 1000);
+    //   chars.forEach((char, index) => {
+    //     setTimeout(() => {
+    //       //@ts-ignore
+    //       char.style.visibility = "visible";
+    //     }, 100 * index);
+    //   });
+    // }, 1000);
 
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
   }, []);
 
   return (

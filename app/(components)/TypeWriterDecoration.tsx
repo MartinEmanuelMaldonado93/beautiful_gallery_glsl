@@ -7,7 +7,7 @@ export default function TypewriterDecoration({
   time_ms = 20,
 }: {
   index: number;
-  profession: string;
+  profession?: string;
   time_ms?: number;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -18,6 +18,7 @@ export default function TypewriterDecoration({
 
     function type() {
       if (!ref.current) return;
+      if (!profession) return;
       if (index == profession.length) return;
 
       ref.current.innerHTML = profession.slice(0, index + 1);
@@ -27,7 +28,10 @@ export default function TypewriterDecoration({
   }, [profession]);
 
   return (
-    <div className="top-10 flex min-w-[35vw] items-center gap-1 text-xl transition-all">
+    <div
+      className="top-10 flex min-w-[35vw] items-center gap-1 text-xl transition-all"
+      style={{ opacity: profession ? 1 : 0 }}
+    >
       <span style={{ fontFamily: "big-daily" }}>
         {"("}
         {index}

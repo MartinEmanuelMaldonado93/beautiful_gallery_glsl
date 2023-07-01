@@ -24,7 +24,8 @@ export default function Home() {
           background: "linear-gradient(to top, transparent,  #d1dbdc);",
         }}
 		dataStyles={{
-			fontSize: '3rem',
+			color:'black',
+			fontSize: '2rem',
 			fontFamily:'big-daily-italic-light'
 		}}
       />

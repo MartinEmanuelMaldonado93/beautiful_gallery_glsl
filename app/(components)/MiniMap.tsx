@@ -13,13 +13,6 @@ const geometry = new BufferGeometry().setFromPoints([
   new Vector3(0, 2, 0),
 ]);
 
-// extend({ SVGLineElement });
-
-// declare module "@react-three/fiber" {
-//   interface ThreeElements {
-//     line: Object3DNode<typeof SVGLineElement, typeof SVGLineElement>;
-//   }
-// }
 /** uses ScrollControls
  * horizontal  pages={(width - xW + urls.length * xW) / width}
  */
@@ -31,11 +24,6 @@ export function Minimap() {
 
   useFrame((state, delta) => {
     ref.current.children.forEach((child, index) => {
-      // Give me a value between 0 and 1
-      //   starting at the position of my item
-      //   ranging across 4 / total length
-      //   make it a sine, so the value goes from 0 to 1 to 0.
-      // grows only y axis
       const y = scroll.curve(
         index / urls.length - 1.5 / urls.length,
         4 / urls.length

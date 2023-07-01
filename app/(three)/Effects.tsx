@@ -6,19 +6,19 @@ import { useControls } from "leva";
 
 export const EffectsWithRef = forwardRef((_, ref) => {
   const { viewport } = useThree();
-  const ctrl = useControls({
-    active: {
-      value: true,
-    },
-    // ior: {
-    //   value: 0.9,
-    //   min: 0.8,
-    //   max: 1.2,
-    // },
-    // transmission: 0.5,
-  });
+  //   const ctrl = useControls({
+  //     active: {
+  //       value: true,
+  //     },
+  //     ior: {
+  //       value: 0.9,
+  //       min: 0.8,
+  //       max: 1.2,
+  //     },
+  //     // transmission: 0.5,
+  //   });
 
-  return ctrl.active ? (
+  return (
     <mesh position={[0, 0, 1]}>
       {/* fill all the window  */}
       <planeGeometry args={[viewport.width, viewport.height]} />
@@ -32,10 +32,10 @@ export const EffectsWithRef = forwardRef((_, ref) => {
         chromaticAberration={0.06}
         anisotropy={0}
         // ior={ctrl.ior}
-        ior={0.86}
+        ior={0.9}
         distortionScale={0}
         temporalDistortion={0}
       />
     </mesh>
-  ) : null;
+  );
 });

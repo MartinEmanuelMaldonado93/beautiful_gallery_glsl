@@ -79,9 +79,9 @@ export default function Carousel() {
 	) {
 		if(!$items) return;
 		const piramidalIndex = getPiramidalIndex($items, activeNro)[index];
-		// console.log("display animation...")
+
 		gsap.to(item.position, {
-			x: (index - activeNro) * (planeSettings.width + planeSettings.gap),
+			x: (index - activeNro) * (planeSettings.width + planeSettings.gap + 0.2),
 			y: $items.length * -0.1 + piramidalIndex * 0.1,
 		});
 	}

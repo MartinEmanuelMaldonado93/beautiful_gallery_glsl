@@ -36,7 +36,7 @@ export default function Carousel() {
 	const isDown = useRef<boolean>(false);
 	const speed = useRef<number>(0);
 	const oldProgress = useRef<number>(0);
-	const speedWheel = 0.02;
+	const speedWheel = 0.09;
 	const speedDrag = -0.3;
 
 	const [$items, set$items] = useState<
@@ -91,7 +91,7 @@ export default function Carousel() {
 
 		const isVerticalScroll = abs(e.deltaY) > abs(e.deltaX);
 		const wheelProgress = isVerticalScroll ? e.deltaY : e.deltaX;
-		progress.current = progress.current + wheelProgress * speedWheel;
+		progress.current += wheelProgress * speedWheel;
 	}
 
 	function handleDown(e: ThreeEvent<PointerEvent>) {

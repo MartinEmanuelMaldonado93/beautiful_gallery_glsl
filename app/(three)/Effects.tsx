@@ -10,12 +10,12 @@ export const EffectsWithRef = forwardRef((_, ref) => {
     active: {
       value: true,
     },
-    ior: {
-      value: 0.9,
-      min: 0.8,
-      max: 1.2,
-    },
-    transmission: 0.5,
+    // ior: {
+    //   value: 0.9,
+    //   min: 0.8,
+    //   max: 1.2,
+    // },
+    // transmission: 0.5,
   });
 
   return ctrl.active ? (
@@ -31,7 +31,8 @@ export const EffectsWithRef = forwardRef((_, ref) => {
         thickness={0}
         chromaticAberration={0.06}
         anisotropy={0}
-        ior={ctrl.ior}
+        // ior={ctrl.ior}
+        ior={0.86}
         distortionScale={0}
         temporalDistortion={0}
       />

@@ -1,10 +1,9 @@
 "use client";
-import { Canvas, useThree } from "@react-three/fiber";
-import { OrbitControls, Scroll, ScrollControls } from "@react-three/drei";
+import { Scroll, ScrollControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
-import Carousel from "./Carousel";
 import { Minimap } from "../(components)/MiniMap";
-import collection_images from "../(data)";
+import Carousel from "./Carousel";
 
 export default function CanvasScene() {
   return (
@@ -12,12 +11,11 @@ export default function CanvasScene() {
       <Canvas className="h-screen w-full">
         <ambientLight intensity={0.001} />
         <Carousel />
-		<ScrollControls>
-			<Scroll>
-				<Minimap />
-			</Scroll>
-		</ScrollControls>
-        {/* <OrbitControls /> */}
+        <ScrollControls>
+          <Scroll>
+            <Minimap />
+          </Scroll>
+        </ScrollControls>
       </Canvas>
     </Suspense>
   );

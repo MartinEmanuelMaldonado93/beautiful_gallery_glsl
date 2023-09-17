@@ -1,7 +1,6 @@
-import { useActiveStore, useNameStore } from "@/store";
+import { useActiveStore, useNameStore } from "@store";
 import Typewriter from "./TypeWriter";
 import TypewriterDecoration from "./TypeWriterDecoration";
-import { useEffect } from "react";
 
 export default function InfoBar() {
   const { name_photo, index, profession } = useNameStore();

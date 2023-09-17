@@ -1,11 +1,10 @@
 "use client";
-import { useThree, useFrame, extend, Object3DNode } from "@react-three/fiber";
-import { useRef } from "react";
-import { damp } from "three/src/math/MathUtils";
-import { image_data } from "../(models)";
-import { BufferGeometry, LineBasicMaterial, Vector3 } from "three";
 import { useScroll } from "@react-three/drei";
-import collection_images from "../(data)";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useRef } from "react";
+import { BufferGeometry, LineBasicMaterial, Vector3 } from "three";
+import { damp } from "three/src/math/MathUtils";
+import collection_images from "../../store/(data)";
 
 const material = new LineBasicMaterial({ color: "black" });
 const geometry = new BufferGeometry().setFromPoints([
@@ -37,7 +36,7 @@ export function Minimap() {
       {urls.map((_, i) => (
         <line
           key={i}
-		  //@ts-ignore
+          //@ts-ignore
           geometry={geometry}
           material={material}
           position={[i * 0.06 - urls.length * 0.03, -height / 2 + 0.6, 0]}

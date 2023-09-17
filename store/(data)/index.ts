@@ -1,5 +1,3 @@
-import { image_data } from "../(models)";
-
 const collection_images: image_data[] = [
   {
     name: "Clara",

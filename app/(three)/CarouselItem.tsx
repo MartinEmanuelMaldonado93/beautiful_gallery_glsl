@@ -1,11 +1,9 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import PlanePhoto from "./PlanePhoto";
-import { Group, Vector3 } from "three";
-import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
-import { useAnimation } from "framer-motion";
-import { image_data } from "../(models)";
-import gsap from "gsap";
 import { useActiveStore, useNameStore } from "@/store";
+import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
+import gsap from "gsap";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { type Group, Vector3 } from "three";
+import PlanePhoto from "./PlanePhoto";
 
 type props = {
   index: number;
@@ -23,7 +21,7 @@ export default function CarouselItem({
   activePlane,
   item,
 }: props) {
-  const rootRef = useRef<Group>(null!);
+  const groupRef = useRef<Group>(null!);
   const { setNamePhoto } = useNameStore();
   const { activeFullPhoto, setActiveFullPhoto } = useActiveStore();
   const [hover, setHover] = useState(false);
@@ -47,21 +45,24 @@ export default function CarouselItem({
   }, [activePlane]);
 
   useEffect(() => {
-    gsap.killTweensOf(rootRef.current.position);
-    gsap.to(rootRef.current.position, {
-      z: isActive ? 0 : -0.01,
-      duration: 0.2,
-      ease: "power3.out",
-      delay: isActive ? 0 : 1,
-    });
+    // TODO: i dontk know what is used for
+    // gsap.killTweensOf(groupRef.current.position);
+    // gsap.to(groupRef.current.position, {
+    //   z: isActive ? 0 : -0.01,
+    //   duration: 0.2,
+    //   ease: "power3.out",
+    //   delay: isActive ? 0 : 1,
+    // });
+    
+    
   }, [isActive]);
 
   useFrame(() => {
-    if (!rootRef.current) return;
+    if (!groupRef.current) return;
 
-    const newPos = rootRef.current.position.clone();
+    const newPos = groupRef.current.position.clone();
     newPos.lerp(targetPos, 0.1);
-    rootRef.current.position.setZ(newZposition);
+    groupRef.current.position.setZ(newZposition);
   });
 
   // Hover effect
@@ -69,18 +70,18 @@ export default function CarouselItem({
   const targetScale = new Vector3(hoverScale, hoverScale, 1);
   const scaleSpeed = 0.5;
   useFrame(() => {
-    if (!rootRef.current) return;
+    if (!groupRef.current) return;
 
-    const newScale = rootRef.current.scale.clone();
+    const newScale = groupRef.current.scale.clone();
     newScale.lerp(targetScale, scaleSpeed); // interpolation *
-    rootRef.current.scale.copy(newScale);
+    groupRef.current.scale.copy(newScale);
   });
 
   function handleClose(e: ThreeEvent<MouseEvent>) {
     e.stopPropagation();
     if (!isActive) return;
 
-	setTimeout(() => {
+    setTimeout(() => {
       setActiveFullPhoto(!activeFullPhoto);
     }, 500);
     setActivePlane(null);
@@ -93,7 +94,7 @@ export default function CarouselItem({
 
   return (
     <group
-      ref={rootRef}
+      ref={groupRef}
       onClick={() => {
         setActivePlane(index);
         setActiveFullPhoto(!activeFullPhoto);
@@ -118,7 +119,7 @@ export default function CarouselItem({
       {isActive && (
         <mesh position={[0, 0, 0.01]} onClick={handleClose}>
           <planeGeometry args={[viewport.width, viewport.height]} />
-          <meshBasicMaterial transparent={true} opacity={0} color={"red"} />
+          <meshBasicMaterial transparent={true} opacity={0} />
         </mesh>
       )}
     </group>
